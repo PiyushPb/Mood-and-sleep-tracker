@@ -1,0 +1,84 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,100&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+.progress_bar {
+  width: 100%;
+  height: 10px; /* Adjust the height as needed */
+  background-color: #eee; /* Background color of the progress bar container */
+  border-radius: 5px; /* Optional: Add rounded corners to the progress bar container */
+}
+
+progress {
+  width: 100%;
+  height: 100%;
+  appearance: none; /* Remove the default appearance (styles) of the progress element */
+  border: none; /* Remove any default border */
+}
+
+progress::-webkit-progress-bar {
+  background-color: #eee; /* Background color of the progress bar container for WebKit browsers (Chrome, Safari) */
+  border-radius: 5px; /* Optional: Add rounded corners for WebKit browsers */
+}
+
+progress::-webkit-progress-value {
+  background-color: #7666d7; /* Color of the progress bar for WebKit browsers */
+  border-radius: 5px; /* Optional: Add rounded corners for WebKit browsers */
+}
+
+progress::-moz-progress-bar {
+  background-color: #7666d7; /* Color of the progress bar for Firefox */
+  border-radius: 5px; /* Optional: Add rounded corners for Firefox */
+}
+
+.mood_slider {
+  width: 100%;
+  margin-top: 10px;
+  appearance: none;
+  height: 10px;
+  border-radius: 5px;
+  background: #d3d3d3;
+  outline: none;
+}
+
+.mood_slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #7666d7;
+  cursor: pointer;
+}
+
+.hidden-radio {
+  display: none;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.checkbox-label:before {
+  content: "";
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid #4b4b4b;
+  border-radius: 4px;
+  margin-right: 10px;
+  background-color: white;
+}
+
+.hidden-radio:checked + .checkbox-label:before {
+  background-color: #7666d7;
+}
