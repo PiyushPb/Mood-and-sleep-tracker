@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -30,25 +30,47 @@ export const options = {
   },
 };
 
-const labels = ["Week 1", "Week 2", "Week 3", "Week 4", "Week 5", "Week 6"];
+const labels = ["Day 7", "Day 6", "Day 5", "Day 4", "Day 3", "Day 2", "Day 1"];
+
+const mood_data = [];
+const sleep_data = [];
 
 export const data = {
   labels,
   datasets: [
     {
       label: "Mood",
-      data: [1, 2, 1, 3, 2, 1],
+      data: mood_data,
       borderColor: "rgb(255, 99, 132)",
       backgroundColor: "rgba(255, 99, 132, 0.5)",
     },
     {
       label: "Sleep",
-      data: [1, 2, 3, 3, 2, 1.2],
+      data: sleep_data,
       borderColor: "rgb(53, 162, 235)",
       backgroundColor: "rgba(53, 162, 235, 0.5)",
     },
   ],
 };
+
+const loadData = () => {
+  const storedFormData = JSON.parse(localStorage.getItem("formData")) || [];
+
+  // Get the recent seven days' data
+  const recentSevenDaysData = storedFormData.slice(0, 7).reverse();
+
+  // Populate mood_data and sleep_data arrays
+  recentSevenDaysData.forEach((entry) => {
+    mood_data.push(parseInt(entry.mood));
+    sleep_data.push(parseInt(entry.sleep));
+  });
+
+  // Update the data object
+  data.datasets[0].data = mood_data;
+  data.datasets[1].data = sleep_data;
+};
+
+loadData();
 
 const ThisWeeksData = () => {
   return (

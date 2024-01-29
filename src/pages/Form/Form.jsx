@@ -15,7 +15,18 @@ const Form = (props) => {
   const [sleepMood, setSleepMood] = useState(2);
   const [currentForm, setCurrentForm] = useState(1);
   const [formSubmitted, setFormSubmitted] = useState(false);
+
+  const getCurrentDate = () => {
+    const currentDate = new Date();
+    const year = currentDate.getFullYear();
+    const month = String(currentDate.getMonth() + 1).padStart(2, "0");
+    const day = String(currentDate.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
+
   const [formData, setFormData] = useState({
+    // Include date in the initial state
+    date: getCurrentDate(),
     mood: "",
     day: "",
     sleep: "",
@@ -37,30 +48,34 @@ const Form = (props) => {
   const handleNextQuestion = (e) => {
     e.preventDefault();
     setCurrentForm((prevForm) => prevForm + 1);
-    console.log(mood);
   };
 
   const submitForm = async (e) => {
     e.preventDefault();
-
-    setFormData({
+    const updatedFormData = {
       ...formData,
       mood: mood.toString(),
       day: day.toString(),
       sleep: sleepMood.toString(),
-    });
+    };
+    let storedFormData = JSON.parse(localStorage.getItem("formData"));
+
+    if (!Array.isArray(storedFormData)) {
+      storedFormData = [];
+    }
+
+    storedFormData.push(updatedFormData);
+    localStorage.setItem("formData", JSON.stringify(storedFormData));
 
     setFormSubmitted(true);
   };
 
   useEffect(() => {
     if (formSubmitted) {
-      localStorage.setItem("formData", JSON.stringify(formData));
-      localStorage.setItem("quizTaken", JSON.stringify(true));
       setIsFormTaken(true);
       props.setShowForm(false);
     }
-  }, [formSubmitted, formData, setIsFormTaken, props.setShowForm]);
+  }, [formSubmitted, setIsFormTaken, props.setShowForm]);
 
   const renderCurrentForm = () => {
     switch (currentForm) {
