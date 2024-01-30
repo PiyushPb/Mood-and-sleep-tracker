@@ -1,12 +1,14 @@
 import React, { useState, useEffect, createContext } from "react";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, Navigate } from "react-router-dom";
 import Navbar from "./Navbar";
 import Home from "./Home";
 import Chat from "./Chat";
+import { useAuth } from "../auth/AuthProvider";
 
 export const formContext = createContext();
 
 const Layout = () => {
+  const { isLoggedIn } = useAuth();
   const [isFormTaken, setIsFormTaken] = useState(() => {
     const storedState = localStorage.getItem("quizTaken");
     return storedState ? JSON.parse(storedState) : false;
@@ -38,11 +40,16 @@ const Layout = () => {
           path="/"
           element={
             <formContext.Provider value={{ isFormTaken, setIsFormTaken }}>
-              <Home />
+              {isLoggedIn ? <Navigate to="/" /> : <Navigate to="/login" />}
             </formContext.Provider>
           }
         />
-        <Route path="/chat" element={<Chat />} />
+        <Route
+          path="/chat"
+          element={
+            isLoggedIn ? <Navigate to="/chat" /> : <Navigate to="/login" />
+          }
+        />
       </Routes>
       <Navbar />
     </>
