@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Navbar from "./Navbar";
 
 const ChatMessage = ({ isSent, sender, time, message, imageUrl }) => {
   const flexDirection = isSent ? "row" : "row-reverse";
@@ -30,7 +31,6 @@ const Chat = () => {
 
   const sendMessage = () => {
     if (inputMessage.trim() !== "") {
-      // Simulate sending a message
       const sentMessage = {
         isSent: true,
         sender: "Your Name",
@@ -39,7 +39,6 @@ const Chat = () => {
         imageUrl: "https://your-sender-image-url.jpg",
       };
 
-      // Simulate receiving a response
       const responseMessage = {
         isSent: false,
         sender: "AI Bot",
@@ -49,7 +48,40 @@ const Chat = () => {
           "https://img.freepik.com/free-vector/cute-robot-wearing-hat-flying-cartoon-vector-icon-illustration-science-technology-icon-isolated_138676-5186.jpg?w=740&t=st=1706545212~exp=1706545812~hmac=d95a4daefa7a6f7eaf965b35f220042482a64de35f7e0015551e8225718d1957",
       };
 
-      // Update the state with the sent and received messages
+      const dymmyData = [
+        {
+          isSent: true,
+          sender: "Your Name",
+          time: new Date().toLocaleTimeString(),
+          message: "Hello, this is a test message!",
+          imageUrl: "https://your-sender-image-url.jpg",
+        },
+        {
+          isSent: false,
+          sender: "AI Bot",
+          time: new Date().toLocaleTimeString(),
+          message: "Received: Hello, this is a test message!",
+          imageUrl:
+            "https://img.freepik.com/free-vector/cute-robot-wearing-hat-flying-cartoon-vector-icon-illustration-science-technology-icon-isolated_138676-5186.jpg?w=740&t=st=1706545212~exp=1706545812~hmac=d95a4daefa7a6f7eaf965b35f220042482a64de35f7e0015551e8225718d1957",
+        },
+
+        {
+          isSent: true,
+          sender: "Your Name",
+          time: new Date().toLocaleTimeString(),
+          message: "Hello, this is a test message!",
+          imageUrl: "https://your-sender-image-url.jpg",
+        },
+        {
+          isSent: false,
+          sender: "AI Bot",
+          time: new Date().toLocaleTimeString(),
+          message: "Received: Hello, this is a test message!",
+          imageUrl:
+            "https://img.freepik.com/free-vector/cute-robot-wearing-hat-flying-cartoon-vector-icon-illustration-science-technology-icon-isolated_138676-5186.jpg?w=740&t=st=1706545212~exp=1706545812~hmac=d95a4daefa7a6f7eaf965b35f220042482a64de35f7e0015551e8225718d1957",
+        },
+      ];
+
       setMessages((prevMessages) => [
         ...prevMessages,
         sentMessage,
@@ -60,28 +92,34 @@ const Chat = () => {
   };
 
   return (
-    <div className="flex flex-col pb-[70px] h-screen">
-      <div className="flex-1 container overflow-auto">
-        <div className="flex flex-col gap-3">
-          {messages.map((msg, index) => (
-            <ChatMessage key={index} {...msg} />
-          ))}
+    <>
+      <div className="flex flex-col pb-[70px] h-screen">
+        <div className="flex-1 container overflow-auto">
+          <div className="flex flex-col gap-5">
+            {messages.length === 0 ? (
+              <div className="text-center">
+                <p>No messages yet</p>
+              </div>
+            ) : (
+              messages.map((msg, index) => <ChatMessage key={index} {...msg} />)
+            )}
+          </div>
+        </div>
+        <div className="flex p-4">
+          <input
+            type="text"
+            placeholder="Type a message"
+            className="w-full border p-2 outline-none"
+            value={inputMessage}
+            onChange={(e) => setInputMessage(e.target.value)}
+          />
+          <button className="bg-blue-500 text-white px-3" onClick={sendMessage}>
+            Send
+          </button>
         </div>
       </div>
-      <div className="flex p-4">
-        <input
-          type="text"
-          placeholder="Type a message"
-          className="w-full border p-2 outline-none"
-          value={inputMessage}
-          onChange={(e) => setInputMessage(e.target.value)}
-        />
-        <button className="bg-blue-500 text-white px-3" onClick={sendMessage}>
-          Send
-        </button>
-      </div>
-    </div>
+      <Navbar />
+    </>
   );
 };
-
 export default Chat;

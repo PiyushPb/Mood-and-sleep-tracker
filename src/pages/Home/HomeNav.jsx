@@ -1,17 +1,14 @@
 import React from "react";
 
 const HomeNav = () => {
+  const userdata = JSON.parse(localStorage.getItem("userprofiledata"));
   return (
     <div className="flex justify-between items-center">
       <div>
-        <h1 className="font-bold text-[30px]">Hi, Piyush</h1>
-        {/* TODO : add user name */}
+        <h1 className="font-bold text-[30px]">Hi, {userdata.username}</h1>
         <p className="text-[14px]">This is your daily summary</p>
       </div>
-      <img
-        src="https://xsgames.co/randomusers/assets/avatars/male/17.jpg"
-        className="w-[60px] rounded-full"
-      />
+      <img src={userdata.userprofile} className="w-[60px] rounded-full" />
     </div>
   );
 };

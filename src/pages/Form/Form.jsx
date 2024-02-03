@@ -5,7 +5,7 @@ import happyGif from "../../assets/happy.gif";
 import mediumGif from "../../assets/medium.gif";
 import sleepyGif from "../../assets/sleepy.gif";
 
-import { formContext } from "../Layout";
+import { formContext } from "../../App";
 
 const Form = (props) => {
   const { setIsFormTaken } = useContext(formContext);
