@@ -3,6 +3,7 @@ import DateTimeCard from "./Trackers/DateTimeCard";
 import ThisWeeksData from "./Trackers/ThisWeeksData";
 import TakeQuiz from "./Trackers/TakeQuiz";
 import TodaysMood from "./Trackers/TodaysMood";
+import AvgTracker from "./Trackers/AvgTracker";
 
 const CardContainer = (props) => {
   return (
@@ -13,6 +14,9 @@ const CardContainer = (props) => {
       </div>
       <div className="flex flex-col gap-5 mt-5">
         <ThisWeeksData />
+      </div>
+      <div className="flex flex-col gap-5 mt-5">
+        <AvgTracker />
       </div>
       <TakeQuiz setShowForm={props.setShowForm} />
     </div>

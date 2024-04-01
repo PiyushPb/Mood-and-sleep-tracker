@@ -15,12 +15,18 @@ const ChatMessage = ({ isSent, sender, time, message, imageUrl }) => {
         }-xl rounded-${isSent ? "se" : "es"}-xl dark:bg-gray-700`}
       >
         <div className="flex items-center space-x-2 rtl:space-x-reverse">
-          <span className={`text-sm font-semibold ${textColor}`}>{sender}</span>
+          {isSent && (
+            <span className={`text-sm font-semibold ${textColor}`}>
+              {sender}
+            </span>
+          )}
           <span className={`text-sm font-normal ${textColor}`}>{time}</span>
         </div>
         <p className={`text-sm font-normal py-2.5 ${textColor}`}>{message}</p>
       </div>
-      <img className="w-8 h-8 rounded-full" src={imageUrl} alt="R" />
+      {!isSent && (
+        <img className="w-8 h-8 rounded-full" src={imageUrl} alt="R" />
+      )}
     </div>
   );
 };
@@ -29,65 +35,53 @@ const Chat = () => {
   const [inputMessage, setInputMessage] = useState("");
   const [messages, setMessages] = useState([]);
 
-  const sendMessage = () => {
+  const sendMessage = async () => {
     if (inputMessage.trim() !== "") {
-      const sentMessage = {
-        isSent: true,
-        sender: "Your Name",
-        time: new Date().toLocaleTimeString(),
-        message: inputMessage,
-        imageUrl: "https://your-sender-image-url.jpg",
-      };
-
-      const responseMessage = {
-        isSent: false,
-        sender: "AI Bot",
-        time: new Date().toLocaleTimeString(),
-        message: `Received: ${inputMessage}`,
-        imageUrl:
-          "https://img.freepik.com/free-vector/cute-robot-wearing-hat-flying-cartoon-vector-icon-illustration-science-technology-icon-isolated_138676-5186.jpg?w=740&t=st=1706545212~exp=1706545812~hmac=d95a4daefa7a6f7eaf965b35f220042482a64de35f7e0015551e8225718d1957",
-      };
-
-      const dymmyData = [
-        {
+      try {
+        // Sending user message
+        const sentMessage = {
           isSent: true,
-          sender: "Your Name",
+          sender: "You", // Update sender to "You"
           time: new Date().toLocaleTimeString(),
-          message: "Hello, this is a test message!",
-          imageUrl: "https://your-sender-image-url.jpg",
-        },
-        {
-          isSent: false,
-          sender: "AI Bot",
-          time: new Date().toLocaleTimeString(),
-          message: "Received: Hello, this is a test message!",
-          imageUrl:
-            "https://img.freepik.com/free-vector/cute-robot-wearing-hat-flying-cartoon-vector-icon-illustration-science-technology-icon-isolated_138676-5186.jpg?w=740&t=st=1706545212~exp=1706545812~hmac=d95a4daefa7a6f7eaf965b35f220042482a64de35f7e0015551e8225718d1957",
-        },
+          message: inputMessage,
+          imageUrl: "",
+        };
+        setMessages((prevMessages) => [...prevMessages, sentMessage]);
 
-        {
-          isSent: true,
-          sender: "Your Name",
-          time: new Date().toLocaleTimeString(),
-          message: "Hello, this is a test message!",
-          imageUrl: "https://your-sender-image-url.jpg",
-        },
-        {
-          isSent: false,
-          sender: "AI Bot",
-          time: new Date().toLocaleTimeString(),
-          message: "Received: Hello, this is a test message!",
-          imageUrl:
-            "https://img.freepik.com/free-vector/cute-robot-wearing-hat-flying-cartoon-vector-icon-illustration-science-technology-icon-isolated_138676-5186.jpg?w=740&t=st=1706545212~exp=1706545812~hmac=d95a4daefa7a6f7eaf965b35f220042482a64de35f7e0015551e8225718d1957",
-        },
-      ];
+        const response = await fetch(
+          "https://moodchatbotapi.onrender.com/ask",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              input: inputMessage,
+            }),
+          }
+        );
 
-      setMessages((prevMessages) => [
-        ...prevMessages,
-        sentMessage,
-        responseMessage,
-      ]);
-      setInputMessage("");
+        if (!response.ok) {
+          throw new Error("Failed to send message");
+        }
+
+        const responseData = await response.json();
+
+        // Construct the message from the response
+        const responseMessage = {
+          isSent: false,
+          sender: responseData.sender, // Assuming sender is included in the response data
+          time: new Date().toLocaleTimeString(),
+          message: responseData.text,
+          imageUrl:
+            "https://scontent.fbom5-1.fna.fbcdn.net/v/t1.6435-9/125512014_187927989469711_3412240680594336888_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=5f2048&_nc_ohc=MW1guOfvg4EAX-gp_Gy&_nc_ht=scontent.fbom5-1.fna&oh=00_AfBgfwWqtSi4CljBnFfG5xkbBHX67CUEkefkL-sd5XUJTg&oe=6630D2C2", // Assuming imageUrl is included in the response data
+        };
+
+        setMessages((prevMessages) => [...prevMessages, responseMessage]);
+        setInputMessage("");
+      } catch (error) {
+        console.error("Error sending message:", error.message);
+      }
     }
   };
 
@@ -122,4 +116,5 @@ const Chat = () => {
     </>
   );
 };
+
 export default Chat;
